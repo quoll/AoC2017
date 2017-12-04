@@ -4,7 +4,7 @@
 
 (defn -main [& args]
   (doseq [n (range 1 (inc max-day))]
-    (print "Day " n ": ")
+    (print (str "Day" n ": "))
     (let [ns-symbol (symbol (str "aoc.day" n))]
       (require ns-symbol)
       (let [day-ns (the-ns ns-symbol)]

@@ -40,6 +40,14 @@
        (map #(- (int %) 48))
        (apply +)))
 
+(defn day1* [data]
+  (let [half (/ (count data) 2)]
+    (->> (map vector data (drop half (concat data data)))
+         (filter (partial apply =))
+         (map first)
+         (map #(- (int %) 48))
+         (apply +))))
+
 (defn -main [& args]
-  (println (day1 day1-data)))
+  (println (day1 day1-data) "; " (day1* day1-data)))
 

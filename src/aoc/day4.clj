@@ -9,8 +9,15 @@
 (defn day4 [phrases]
   (count (filter valid? phrases)))
 
+(defn valid*? [phrase]
+  (let [words (map sort (str/split phrase #" "))]
+    (= (count words) (count (set words)))))
+
+(defn day4* [phrases]
+  (count (filter valid*? phrases)))
+
 (defn -main [& args]
   (let [data (-> (resource "day4.dat")
                  slurp
                  (str/split #"\n"))]
-    (println (day4 data))))
+    (println (day4 data) "; " (day4* data))))

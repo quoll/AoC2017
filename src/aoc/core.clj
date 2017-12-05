@@ -1,6 +1,6 @@
 (ns aoc.core)
 
-(def max-day 4)
+(def max-day 5)
 
 (defn -main [& args]
   (doseq [n (range 1 (inc max-day))]

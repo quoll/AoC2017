@@ -17,6 +17,7 @@
           :let [ns-symbol (symbol (str "aoc.day" n))]
           :while (namespace-load ns-symbol)]
     (print (str "Day" n ": "))
+    (flush)
     (let [day-ns (the-ns ns-symbol)]
       (if-let [main (ns-resolve day-ns '-main)]
         (apply main args)

@@ -2,14 +2,7 @@
   (:require [clojure.java.io :refer [resource]]
             [clojure.string :as str]))
 
-(comment
-  (defn day3 [i]
-    (let [rt (int (Math/ceil (Math/sqrt i)))
-          sq (if (odd? rt) rt (inc rt))
-          hsq (int (/ sq 2))
-          base (* (- sq 2) (- sq 2))
-          side (mod (- i base) (dec sq))]
-    (+ (Math/abs (- hsq side)) hsq))))
+(defn square [x] (* x x))
 
 (defn coords [i]
   (if (<= i 1)
@@ -17,7 +10,7 @@
     (let [rt (int (Math/ceil (Math/sqrt i)))
           sq (if (odd? rt) rt (inc rt))
           hsq (int (/ sq 2))
-          base (* (- sq 2) (- sq 2))
+          base (square (- sq 2))
           side-offset (mod (- i base) (dec sq))
           side-nr (int (/ (- i base) (dec sq)))
           disp (- hsq side-offset)]
@@ -27,26 +20,32 @@
         2 [(- hsq) (- disp)]
         3 [(- disp) hsq]))))
 
+(defn offset [x y]
+  (let [ms (max (Math/abs x) (Math/abs y))
+        sq (dec (* 2 ms))
+        base (square sq)
+        side (inc sq)
+        hside (/ side 2)]
+    (cond
+      (and (= x ms) (< y ms)) (- (+ base hside) y)
+      (= y (- ms)) (- (+ base side hside) x)
+      (= x (- ms)) (+ base (* 2 side) hside y)
+      (= y ms) (+ base (* 3 side) hside x))))
+
 (defn day3 [i]
   (let [[x y] (coords i)]
     (+ (Math/abs x) (Math/abs y))))
 
-(def fieldr 50)
-
-(defn init [half-size]
-  (let [data (vec (repeat (* 2 half-size) (vec (repeat (* 2 half-size) 0))))]
-    (update-in data [half-size half-size] (constantly 1))))
-
 (defn day3* [input]
-  (loop [i 2 field (init fieldr)]
-    (let [[x y] (coords i)
-          x' (+ fieldr x)
-          y' (+ fieldr y)
-          v (apply + (for [i [-1 0 1] j [-1 0 1] :when (not (and (zero? i) (zero? j)))]
-                       (get-in field [(+ y' j) (+ x' i)])))]
-      (if (> v input)
+  (loop [n 2 mem [1 1]]
+    (let [[x y] (coords n)
+          v (apply + (for [i [-1 0 1] j [-1 0 1]
+                           :let [f (offset (+ x i) (+ y j))]
+                           :when (< f n)]
+                       (get mem f)))]
+      (if (or (> n 100) (> v input))
         v
-        (recur (inc i) (update-in field [y' x'] + v))))))
+        (recur (inc n) (conj mem v))))))
 
 (defn -main [& args]
   (println (day3 312051) "; " (day3* 312051)))

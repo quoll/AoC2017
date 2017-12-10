@@ -5,16 +5,17 @@
 (defn knot
   [[array current skip] n]
   (let [sz (count array)
-        overlap (- (+ n current) sz)
-        sa (reverse
-            (if (> overlap 0)
-              (concat (drop current array) (take (- (+ n current) sz) array))
-              (take n (drop current array))))]
-    [(if (> overlap 0)
-       (concat (take overlap (drop (- sz current) sa)) (drop overlap (take current array)) (take (- sz current) sa))
-       (concat (take current array) sa (drop (+ current n) array)))
-     (mod (+ current n skip) sz)
-     (inc skip)]))
+        end (+ n current)
+        overlap (- end sz)
+        arr (if (> overlap 0)
+              (let [sa (reverse (concat (drop current array) (take (- end sz) array)))]
+                (concat (take overlap (drop (- sz current) sa))
+                        (drop overlap (take current array))
+                        (take (- sz current) sa)))
+              (concat (take current array)
+                      (reverse (take n (drop current array)))
+                      (drop end array)))]
+    [arr (mod (+ end skip) sz) (inc skip)]))
 
 (defn day10
   [nums]

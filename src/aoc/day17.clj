@@ -4,20 +4,22 @@
 (defn rnd
   [step]
   (fn [[arr p] v]
-    (let [np (inc (mod (+ p step) (count arr)))]
-      [(concat (take np arr) (cons v (drop np arr))) np])))
+    (let [np (inc (mod (+ p step) v))]
+      [(doall (concat (take np arr) (cons v (drop np arr)))) np])))
 
 (defn day17
-  [i]
-  (let [r (rnd i)
+  [step]
+  (let [r (rnd step)
         [buffer pos] (reduce r [[0] 0] (range 1 2018))]
     (nth buffer (inc pos))))
 
 (defn day17*
-  []
-  )
+  [step]
+  (letfn [(r [[p one] v]
+            (let [np (mod (+ p step) v)]
+              [(inc np) (if (zero? np) v one)]))]
+    (second (reduce r [0 0] (range 1 50000001)))))
 
 
 (defn -main [& args]
-  (println (day17 371) "; ")
-    )
+  (println (day17 371) "; " (day17* 371)))

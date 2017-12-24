@@ -45,6 +45,16 @@
         paths (remaining-paths 0 pipes)]
     (reduce (fn [m p] (let [ps (sum-path p)] (if (> ps m) ps m))) 0 paths)))
 
+(defn day24*
+  [lines]
+  (let [pipes (map parse lines)
+        paths (remaining-paths 0 pipes)
+        max-len (apply max (map count paths))
+        longest (filter #(= max-len (count %)) paths)]
+    (reduce (fn [m p] (let [ps (sum-path p)] (if (> ps m) ps m))) 0 longest)))
+
 (defn -main [& args]
   (let [lines (read-file "day24.dat")]
-    (println (day24 lines) ";" )))
+    (print (day24 lines) "; " )
+    (flush)
+    (println (day24* lines))))

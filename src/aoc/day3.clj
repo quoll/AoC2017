@@ -1,6 +1,4 @@
-(ns aoc.day3
-  (:require [clojure.java.io :refer [resource]]
-            [clojure.string :as str]))
+(ns aoc.day3)
 
 (defn square [x] (* x x))
 

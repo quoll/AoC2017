@@ -37,15 +37,15 @@
     (+ (Math/abs x) (Math/abs y))))
 
 (defn day3* [input]
-  (loop [n 2 mem [1 1]]
-    (let [[x y] (coords n)
-          v (apply + (for [i [-1 0 1] j [-1 0 1]
-                           :let [f (offset (+ x i) (+ y j))]
-                           :when (< f n)]
+  (loop [i 2 mem [1 1]]
+    (let [[x y] (coords i)
+          v (apply + (for [p [-1 0 1] q [-1 0 1]
+                           :let [f (offset (+ x p) (+ y q))]
+                           :when (< f i)]
                        (get mem f)))]
-      (if (or (> n 100) (> v input))
+      (if (> v input)
         v
-        (recur (inc n) (conj mem v))))))
+        (recur (inc i) (conj mem v))))))
 
 (defn -main [& args]
   (println (day3 312051) "; " (day3* 312051)))
